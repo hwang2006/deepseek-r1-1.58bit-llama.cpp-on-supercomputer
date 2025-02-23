@@ -151,7 +151,7 @@ to set up this repository on your scratch direcory.
 ```
 
 ## Building Llama.cpp
-to install the llama.cpp locally on your scratch directory. 
+to install the llama.cpp locally on your scratch directory. Please refer to the [how to build llama.cpp locally here](https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md) for more details.
 * For A100
 
 Please be noted that the "glogin01" login node has A100 GPUs. 
@@ -187,7 +187,7 @@ llama-lookahead*                llama-tts*                 test-tokenizer-1-spm*
 ```
 * For H200
 
-You need to request a H200 node first to build llama.cpp for H200.
+You need to request a H200 node first to build the llama.cpp for H200.
 ```
 [glogin01]$ salloc --partition=eme_h200nv_8 -J debug --nodes=1 --time=12:00:00 --gres=gpu:1  --comment pytorch
 salloc: Granted job allocation 154173
@@ -221,3 +221,70 @@ llama-llava-cli*                llama-speculative-simple*  test-tokenizer-0*
 llama-llava-clip-quantize-cli*  llama-tokenize*            test-tokenizer-1-bpe*
 llama-lookahead*                llama-tts*                 test-tokenizer-1-spm*
 ```
+
+## Creating a Conda Virtual Environment
+1. Create a conda virtual environment with a python version 3.11
+```
+[glogin01]$ conda create -n llama.cpp python=3.11
+Retrieving notices: ...working... done
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+## Package Plan ##
+
+  environment location: /scratch/qualis/miniconda3/envs/llama.cpp
+
+  added / updated specs:
+    - python=3.11
+.
+.
+.
+Proceed ([y]/n)? y    <========== type yes
+
+Downloading and Extracting Packages:
+
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+#
+# To activate this environment, use
+#
+#     $ conda activate llama.cpp
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+```
+
+2. Install PyTorch
+```
+[glogin01]$ module load gcc/10.2.0 cmake/3.26.2 cuda/12.1
+[glogin01]$ conda activate llama.cpp
+(llama.cpp) [glogin01]$ pip install torch==2.5.0 torchvision==0.20.0 torchaudio==2.5.0 --index-url https://download.pytorch.org/whl/cu121
+Looking in indexes: https://download.pytorch.org/whl/cu121, https://pypi.ngc.nvidia.com
+Collecting torch==2.5.0
+  Downloading https://download.pytorch.org/whl/cu121/torch-2.5.0%2Bcu121-cp311-cp311-linux_x86_64.whl (780.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 780.5/780.5 MB 69.3 MB/s eta 0:00:00
+.
+.
+.
+Installing collected packages: mpmath, typing-extensions, sympy, pillow, nvidia-nvtx-cu12, nvidia-nvjitlink-cu12, nvidia-nccl-cu12, nvidia-curand-cu12, nvidia-cufft-cu12, nvidia-cuda-runtime-cu12, nvidia-cuda-nvrtc-cu12, nvidia-cuda-cupti-cu12, nvidia-cublas-cu12, numpy, networkx, MarkupSafe, fsspec, filelock, triton, nvidia-cusparse-cu12, nvidia-cudnn-cu12, jinja2, nvidia-cusolver-cu12, torch, torchvision, torchaudio
+Successfully installed MarkupSafe-2.1.5 filelock-3.13.1 fsspec-2024.6.1 jinja2-3.1.4 mpmath-1.3.0 networkx-3.3 numpy-2.1.2 nvidia-cublas-cu12-12.1.3.1 nvidia-cuda-cupti-cu12-12.1.105 nvidia-cuda-nvrtc-cu12-12.1.105 nvidia-cuda-runtime-cu12-12.1.105 nvidia-cudnn-cu12-9.1.0.70 nvidia-cufft-cu12-11.0.2.54 nvidia-curand-cu12-10.3.2.106 nvidia-cusolver-cu12-11.4.5.107 nvidia-cusparse-cu12-12.1.0.106 nvidia-nccl-cu12-2.21.5 nvidia-nvjitlink-cu12-12.1.105 nvidia-nvtx-cu12-12.1.105 pillow-11.0.0 sympy-1.13.1 torch-2.5.0+cu121 torchaudio-2.5.0+cu121 torchvision-0.20.0+cu121 triton-3.1.0 typing-extensions-4.12.2
+
+```
+3. Install Open WebUI
+
+You can install Open WebUI using pip. Please refer to the [Open WebUI documentation here](https://docs.openwebui.com/) for more details. 
+```
+(llama.cpp) [glogin01]$ pip install open-webui
+Looking in indexes: https://pypi.org/simple, https://pypi.ngc.nvidia.com
+Collecting open-webui
+  Downloading open_webui-0.5.16-py3-none-any.whl.metadata (19 kB)
+.
+.
+.
+Successfully installed Events-0.5 Mako-1.3.9 PyYAML-6.0.2 RTFDE-0.1.2 Shapely-2.0.7 XlsxWriter-3.2.2 aiocache-0.12.3 aiofiles-24.1.0 aiohappyeyeballs-2.4.6 aiohttp-3.11.11 aiosignal-1.3.2 alembic-1.14.0 annotated-types-0.7.0 anthropic-0.46.0 anyio-4.8.0 appdirs-1.4.4 apscheduler-3.10.4 argon2-cffi-23.1.0 argon2-cffi-bindings-21.2.0 ...
+uvicorn-0.30.6 uvloop-0.21.0 validators-0.34.0 watchfiles-1.0.4 wcwidth-0.2.13 webencodings-0.5.1 websocket-client-1.8.0 websockets-15.0 werkzeug-3.1.3 wrapt-1.17.2 wsproto-1.2.0 xlrd-2.0.1 xmltodict-0.14.2 xxhash-3.5.0 yarl-1.18.3 youtube-transcript-api-0.6.3 zipp-3.21.0
+
+```
+4. Install Hu
