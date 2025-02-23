@@ -151,3 +151,73 @@ to set up this repository on your scratch direcory.
 ```
 
 ## Building Llama.cpp
+to install the llama.cpp locally on your scratch directory. 
+* For A100
+
+Please be noted that the "glogin01" login node has A100 GPUs. 
+```
+[glogin01]$ pwd 
+/scratch/$USER/llama.cpp/llama.cpp.a100
+[glogin01]$ module load gcc/10.2.0 cuda/12.1 cmake/3.26.2
+[glogin01]$ cmake -B build -DGGML_CUDA=ON -DGGML_CUDA_ENABLE_UNIFIED_MEMORY=1  -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-mno-avx512vnni -mno-avx512bf16" -DCMAKE_CXX_FLAGS="-mno-avx512vnni -mno-avx512bf16"
+[glogin01]$ cmake --build build --config Release -j 8
+[glogin01]$ ls ./build/bin/
+./                              llama-lookup*              llama-vdot*
+../                             llama-lookup-create*       test-arg-parser*
+llama-batched*                  llama-lookup-merge*        test-autorelease*
+llama-batched-bench*            llama-lookup-stats*        test-backend-ops*
+llama-bench*                    llama-minicpmv-cli*        test-barrier*
+llama-cli*                      llama-parallel*            test-c*
+llama-convert-llama2c-to-ggml*  llama-passkey*             test-chat*
+llama-cvector-generator*        llama-perplexity*          test-chat-template*
+llama-embedding*                llama-q8dot*               test-gguf*
+llama-eval-callback*            llama-quantize*            test-grammar-integration*
+llama-export-lora*              llama-quantize-stats*      test-grammar-parser*
+llama-gbnf-validator*           llama-qwen2vl-cli*         test-json-schema-to-grammar*
+llama-gen-docs*                 llama-retrieval*           test-llama-grammar*
+llama-gguf*                     llama-run*                 test-log*
+llama-gguf-hash*                llama-save-load-state*     test-model-load-cancel*
+llama-gguf-split*               llama-server*              test-quantize-fns*
+llama-gritlm*                   llama-simple*              test-quantize-perf*
+llama-imatrix*                  llama-simple-chat*         test-rope*
+llama-infill*                   llama-speculative*         test-sampling*
+llama-llava-cli*                llama-speculative-simple*  test-tokenizer-0*
+llama-llava-clip-quantize-cli*  llama-tokenize*            test-tokenizer-1-bpe*
+llama-lookahead*                llama-tts*                 test-tokenizer-1-spm*
+```
+* For H200
+
+You need to request a H200 node first to build llama.cpp for H200.
+```
+[glogin01]$ salloc --partition=eme_h200nv_8 -J debug --nodes=1 --time=12:00:00 --gres=gpu:1  --comment pytorch
+salloc: Granted job allocation 154173
+salloc: Waiting for resource configuration
+salloc: Nodes gpu48 are ready for job
+[gpu48]$ module load gcc/10.2.0 cuda/12.1 cmake/3.26.2
+[gpu48]$ cd /scratch/$USER/llama.cpp/llama.cpp.h200
+[gpu48]$ cmake -B build -DGGML_CUDA=ON -DGGML_CUDA_ENABLE_UNIFIED_MEMORY=1  -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-mno-avx512vnni -mno-avx512bf16" -DCMAKE_CXX_FLAGS="-mno-avx512vnni -mno-avx512bf16"
+[gpu48]$ cmake --build build --config Release -j 8
+[gpu48]$ ls ./build/bin
+./                              llama-lookup*              llama-vdot*
+../                             llama-lookup-create*       test-arg-parser*
+llama-batched*                  llama-lookup-merge*        test-autorelease*
+llama-batched-bench*            llama-lookup-stats*        test-backend-ops*
+llama-bench*                    llama-minicpmv-cli*        test-barrier*
+llama-cli*                      llama-parallel*            test-c*
+llama-convert-llama2c-to-ggml*  llama-passkey*             test-chat*
+llama-cvector-generator*        llama-perplexity*          test-chat-template*
+llama-embedding*                llama-q8dot*               test-gguf*
+llama-eval-callback*            llama-quantize*            test-grammar-integration*
+llama-export-lora*              llama-quantize-stats*      test-grammar-parser*
+llama-gbnf-validator*           llama-qwen2vl-cli*         test-json-schema-to-grammar*
+llama-gen-docs*                 llama-retrieval*           test-llama-grammar*
+llama-gguf*                     llama-run*                 test-log*
+llama-gguf-hash*                llama-save-load-state*     test-model-load-cancel*
+llama-gguf-split*               llama-server*              test-quantize-fns*
+llama-gritlm*                   llama-simple*              test-quantize-perf*
+llama-imatrix*                  llama-simple-chat*         test-rope*
+llama-infill*                   llama-speculative*         test-sampling*
+llama-llava-cli*                llama-speculative-simple*  test-tokenizer-0*
+llama-llava-clip-quantize-cli*  llama-tokenize*            test-tokenizer-1-bpe*
+llama-lookahead*                llama-tts*                 test-tokenizer-1-spm*
+```
