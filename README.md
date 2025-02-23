@@ -150,8 +150,8 @@ to set up this repository on your scratch direcory.
 [glogin01]$ cd llama.cpp.h200
 ```
 
-## Building Llama.cpp
-to install the llama.cpp locally on your scratch directory. Please refer to the [how to build llama.cpp locally here](https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md) for more details.
+## Installing Llama.cpp
+to build the llama.cpp locally on your scratch directory. Please refer to the [how to build llama.cpp locally here](https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md) for more details.
 * For A100
 
 Please be noted that the "glogin01" login node has A100 GPUs. 
@@ -287,4 +287,46 @@ Successfully installed Events-0.5 Mako-1.3.9 PyYAML-6.0.2 RTFDE-0.1.2 Shapely-2.
 uvicorn-0.30.6 uvloop-0.21.0 validators-0.34.0 watchfiles-1.0.4 wcwidth-0.2.13 webencodings-0.5.1 websocket-client-1.8.0 websockets-15.0 werkzeug-3.1.3 wrapt-1.17.2 wsproto-1.2.0 xlrd-2.0.1 xmltodict-0.14.2 xxhash-3.5.0 yarl-1.18.3 youtube-transcript-api-0.6.3 zipp-3.21.0
 
 ```
-4. Install Hu
+4. Install Hugging Face dependencies for download a DeepSeek R1 Dynamic Quantization model
+```
+(llama.cpp) [glogin01]$ pip install huggingface_hub hf_transfer
+Looking in indexes: https://pypi.org/simple, https://pypi.ngc.nvidia.com
+Requirement already satisfied: huggingface_hub in /scratch/qualis/miniconda3/envs/llama.cpp/lib/python3.11/site-packages (0.29.1)
+Collecting hf_transfer
+  Downloading hf_transfer-0.1.9-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.7 kB)
+.
+.
+.
+Installing collected packages: hf_transfer
+Successfully installed hf_transfer-0.1.9
+```
+
+## Download the dynamic quantized version of DeepSeek-R1
+For this test, we will download and use the 1.58-bit (131GB) version ("DeepSeek-R1-UD-IQ1_S"). Please refer to the UnslothAI's blog post: [Run DeepSeek R1
+Dynamic 1.58-bit](https://unsloth.ai/blog/deepseekr1-dynamic) for more details about their dynamic quantized versions.
+```
+(llama.cpp) [glogin01]$ cat download_model.py
+import os
+from huggingface_hub import snapshot_download
+
+local_dir = os.path.expandvars("/scratch/$USER/llama.cpp/DeepSeek-R1-GGUF")
+
+snapshot_download(
+    repo_id = "unsloth/DeepSeek-R1-GGUF",  # Specify the Hugging Face repo
+    local_dir = local_dir,         # Model will download into this directory
+    allow_patterns = ["*UD-IQ1_S*"],        # Only download the 1.58-bit version
+)
+```
+```
+(llama.cpp) [glogin01]$ python download_model.py
+```
+Once the download completes, you’ll find the model files in your directory (/scratch/$USER/llama.cpp):
+```
+DeepSeek-R1-GGUF/
+├── DeepSeek-R1-UD-IQ1_S/
+│   ├── DeepSeek-R1-UD-IQ1_S-00001-of-00003.gguf
+│   ├── DeepSeek-R1-UD-IQ1_S-00002-of-00003.gguf
+│   ├── DeepSeek-R1-UD-IQ1_S-00003-of-00003.gguf
+```
+
+
