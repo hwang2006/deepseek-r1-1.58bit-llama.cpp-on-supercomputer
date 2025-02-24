@@ -1,8 +1,8 @@
-# Running Deepseek-R1 Dynamic 1.58-bit with Llama.cpp on a Supercomputer
+# Running DeepSeek-R1 Dynamic 1.58-bit with Llama.cpp on a Supercomputer
 
 DeepSeek-R1, the recently released AI reasoning model from the Chinese AI startup DeepSeek, has gained significant attention for its performance, comparable to leading models like OpenAI's o1 reasoning model. It is open-source and free to use, allowing users to download, modify, and run it for their own purposes.
 
-This repository demonstrates how to run and test DeepSeek-R1 in its dynamic 1.58-bit quantized form using Llama.cpp on a SLURM-managed supercomputer. Thanks to advanced quantization techniques, the full 671B parameter model is compressed to just 131GB, making it significantly more accessible. You can now run it efficiently on a supercomputer with 1 or 2 A100 or H200 GPUs allocated through your account, **with a 2 H200 GPU setup mostly recommended for optimal performance**. This removes the need for extremely large GPU configurations.
+This repository demonstrates how to run and test DeepSeek-R1 in its dynamic 1.58-bit quantized form using Llama.cpp on a SLURM-managed supercomputer. Thanks to advanced quantization techniques, the full 671B parameter model is compressed to just 131GB, making it significantly more accessible. You can now run it efficiently on a supercomputer with 1~2 A100 or H200 GPUs allocated through your account, **with a two H200 GPUs setup mostly recommended for optimal performance**. This removes the need for extremely large GPU configurations.
 
 Llama.cpp provides an efficient framework for running large-scale AI models on CPUs and GPUs with optimized inference. This guide walks you through the steps needed to set up, deploy, and interact with DeepSeek-R1 in its quantized form on a high-performance computing (HPC) environment.
 
@@ -11,7 +11,7 @@ Llama.cpp provides an efficient framework for running large-scale AI models on C
 *   **Dynamic 1.58-bit quantization**: Reduces memory usage while maintaining model performance.
 *   **Supercomputer compatibility**: Run DeepSeek-R1 efficiently on SLURM-managed HPC clusters.
 *   **llama.cpp integration**: Utilize the optimized inference engine for fast execution.
-*   **Supports 1-2 GPUs**: Can be run on a supercomputer with 1 or 2 A100 or H200 GPUs using individual user accounts.
+*   **Supports 1-2 GPUs**: Can be run on a supercomputer with 1~2 A100 or H200 GPUs using individual user accounts.
 
 **Contents**
 * [KISTI Neuron GPU Cluster](#kisti-neuron-gpu-cluster)
@@ -512,7 +512,7 @@ ssh -L localhost:8080:gpu50:8080 $USER@neuron.ksc.re.kr
 
 <img width="1198" alt="Image" src="https://github.com/user-attachments/assets/d5f835bf-c344-4c9a-9526-d693e8d7ff9a" />
 
-- Then, connect to the `llama.cpp` server as follows:
+- Connect to the `llama.cpp` server as follows:
   - Go to **Settings** and **Admin Settings** by clicking the orange admin account at the bottom left in Open WebUI.
   - Navigate to **Connections > OpenAI Connections**.
   - Add the following details for the new connection:
