@@ -16,7 +16,9 @@ Llama.cpp provides an efficient framework for running large-scale AI models on C
 **Contents**
 * [KISTI Neuron GPU Cluster](#kisti-neuron-gpu-cluster)
 * [Installing Conda](#installing-conda)
-* 
+* [Cloning the Repository]
+* [Installing Llama.cpp]
+* [Running Open WebUI]
 * [Reference](#reference)
 
 ## KISTI Neuron GPU Cluster
