@@ -16,9 +16,10 @@ Llama.cpp provides an efficient framework for running large-scale AI models on C
 **Contents**
 * [KISTI Neuron GPU Cluster](#kisti-neuron-gpu-cluster)
 * [Installing Conda](#installing-conda)
-* [Cloning the Repository]
-* [Installing Llama.cpp]
-* [Running Open WebUI]
+* [Installing Llama.cpp](#installing-llama.cpp)
+* [Cloning the Repository](#cloning-the-repository)
+* [Download the dynamic quantized version of DeepSeek-R1](#download-the-dynamic-quantized-version-of-deepSeek-r1)
+* [Running Open WebUI](#running-open-webui-along-with-launching-llama.cpp-and-ppen-webui-server)
 * [Reference](#reference)
 
 ## KISTI Neuron GPU Cluster
@@ -335,7 +336,7 @@ DeepSeek-R1-GGUF/
 │   ├── DeepSeek-R1-UD-IQ1_S-00003-of-00003.gguf
 ```
 
-## Running Open WebUI along with launching llama.cpp and Open WebUI server on compute node
+## Running Open WebUI along with launching llama.cpp and Open WebUI server
 This section describes how to run the Open WebUI along with launching the llama.cpp server and Open WebUI server on a compute node. The following Slurm script will start both servers and output a port forwarding command, which you can use to connect remotely.
 
 ### Slurm Script (llama_openwebui_run.sh)
