@@ -13,7 +13,11 @@ Llama.cpp provides an efficient framework for running large-scale AI models on C
 *   **llama.cpp integration**: Utilize the optimized inference engine for fast execution.
 *   **Supports 1-2 GPUs**: Can be run on a supercomputer with 1 or 2 A100 or H200 GPUs using individual user accounts.
 
-**Note that 
+**Contents**
+* [KISTI Neuron GPU Cluster](#kisti-neuron-gpu-cluster)
+* [Installing Conda](#installing-conda)
+* 
+* [Reference](#reference)
 
 ## KISTI Neuron GPU Cluster
 Neuron is a KISTI GPU cluster system consisting of 65 nodes with 300 GPUs (40 of NVIDIA H200 GPUs, 120 of NVIDIA A100 GPUs and 140 of NVIDIA V100 GPUs). [Slurm](https://slurm.schedmd.com/) is adopted for cluster/resource management and job scheduling.
@@ -519,4 +523,5 @@ ssh -L localhost:8080:gpu50:8080 $USER@neuron.ksc.re.kr
 ![Image](https://github.com/user-attachments/assets/e2083708-d78e-4258-ad44-ed0faf01df21)
 
 
-
+## Reference
+* [Run DeepSeek R1 Dynamic 1.58-bit with Llama.cpp](https://docs.openwebui.com/tutorials/integrations/deepseekr1-dynamic/)
