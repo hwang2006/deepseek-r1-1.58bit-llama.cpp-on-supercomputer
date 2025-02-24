@@ -1,4 +1,4 @@
-# Running Deepseek-R1 Dynamic 1.58-bit with Llama.cpp on a Supercomputer
+# Running DeepSeek-R1 Dynamic 1.58-bit with Llama.cpp on a Supercomputer
 
 DeepSeek-R1, the recently released AI reasoning model from the Chinese AI startup DeepSeek, has gained significant attention for its performance, comparable to leading models like OpenAI's o1 reasoning model. It is open-source and free to use, allowing users to download, modify, and run it for their own purposes.
 
