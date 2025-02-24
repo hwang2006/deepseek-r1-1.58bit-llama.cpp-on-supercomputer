@@ -499,8 +499,7 @@ ssh -L localhost:7860:gpu32:7860 $USER@neuron.ksc.re.kr
 ### Connecting to the Open WebUI
 - Once the job starts, open a a new SSH client (e.g., Putty, MobaXterm, PowerShell, Command Prompt, etc) on your local machine and run the port forwarding command displayed in port_forwarding_command:
 
-<img width="787" alt="Image" src="https://github.com/user-attachments/assets/25b218f2-c188-43a0-8081-2814ba9044b4" />
-
+<img width="851" alt="Image" src="https://github.com/user-attachments/assets/12ed1a81-3bef-4755-bae1-996118672a8a" />
 
 - Then, open http://localhost:7860 in your browser to access the Gradio UI and pull a DeepSeek-R1 model (for example, 'deepseek-r1:14b') to the ollama server models directory (e.g., OLLAMA_MODELS="/scratch/$USER/ollama/models" in the slurm script) from the [Ollama models site](https://ollama.com/search) 
 
