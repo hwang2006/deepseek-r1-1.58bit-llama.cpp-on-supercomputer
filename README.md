@@ -329,4 +329,188 @@ DeepSeek-R1-GGUF/
 │   ├── DeepSeek-R1-UD-IQ1_S-00003-of-00003.gguf
 ```
 
+## Running Open WebUI along with launching llama.cpp and Open WebUI server on compute node
+This section describes how to run the Open WebUI along with launching the llama.cpp server and Open WebUI server on a compute node. The following Slurm script will start both servers and output a port forwarding command, which you can use to connect remotely.
+
+### Slurm Script (llama_openwebui_run.sh)
+```bash
+#!/bin/bash
+#SBATCH --comment=pytorch
+##SBATCH --partition=amd_a100nv_8
+#SBATCH --partition=eme_h200nv_8
+#SBATCH --time=48:00:00
+#SBATCH --nodes=1
+##SBATCH --ntasks-per-node=1
+#SBATCH --ntasks-per-node=2
+##SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:2
+#SBATCH --cpus-per-task=8
+
+# ============================
+# Clean Up Old Port Forwarding
+# ============================
+rm -f port_forwarding_command
+
+# Generate a Random Port (Avoiding Conflicts)
+PORT_JU=$(($RANDOM % 10000 + 10000)) # Ensures port is between 10000–20000
+SERVER=$(hostname)
+PORT_JU=8080
+
+echo "Using port: $PORT_JU on server: $SERVER"
+
+# Create SSH Port Forwarding Command
+PORT_FORWARD_CMD="ssh -L localhost:8080:${SERVER}:${PORT_JU} ${USER}@neuron.ksc.re.kr"
+echo "$PORT_FORWARD_CMD" > port_forwarding_command
+echo "To access the web UI, run the following command on your local machine:"
+echo "$PORT_FORWARD_CMD"
+
+# ============================
+# Load Modules
+# ============================
+echo "Loading required modules..."
+module load gcc/10.2.0 cuda/12.1 cmake/3.26.2
+
+# ============================
+# Function: Start Llama.cpp Server
+# ============================
+start_llama_server() {
+  echo "🔍 Detecting available GPUs..."
+
+  # Get the number of GPUs
+  NUM_GPUS=$(nvidia-smi --query-gpu=index --format=csv,noheader | wc -l)
+
+  # Set CUDA_VISIBLE_DEVICES dynamically
+  if [ "$NUM_GPUS" -eq 1 ]; then
+      export CUDA_VISIBLE_DEVICES=0
+  elif [ "$NUM_GPUS" -eq 2 ]; then
+      export CUDA_VISIBLE_DEVICES=0,1
+  fi
+
+  echo "✅ Detected $NUM_GPUS GPU(s): CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES"
+
+  # Detect GPU type
+  GPU_TYPE=$(nvidia-smi --query-gpu=name --format=csv,noheader | head -n 1)
+
+  # Determine the correct llama-server binary path
+  if [[ "$GPU_TYPE" == *"A100"* ]]; then
+      LLAMA_SERVER_BIN="/scratch/$USER/llama.cpp/llama.cpp.a100/build/bin/llama-server"
+      if [ "$NUM_GPUS" -eq 1 ]; then
+          N_GPU_LAYERS=24
+      else
+          N_GPU_LAYERS=40
+      fi
+  elif [[ "$GPU_TYPE" == *"H200"* ]]; then
+      LLAMA_SERVER_BIN="/scratch/$USER/llama.cpp/llama.cpp.h200/build/bin/llama-server"
+      if [ "$NUM_GPUS" -eq 1 ]; then
+          N_GPU_LAYERS=50
+      else
+          N_GPU_LAYERS=62
+      fi
+  else
+      echo "⚠️ Unknown GPU type: $GPU_TYPE. Using default settings."
+      LLAMA_SERVER_BIN="/scratch/$USER/llama.cpp/llama.cpp.default/build/bin/llama-server"
+      N_GPU_LAYERS=20  # Default fallback value
+  fi
+
+  echo "🚀 GPU Type: $GPU_TYPE, Using server binary: $LLAMA_SERVER_BIN"
+  echo "🎯 Setting n-gpu-layers to: $N_GPU_LAYERS"
+
+  # Llama server settings
+  LLAMA_MODEL="/scratch/qualis/llama.cpp/DeepSeek-R1-GGUF/DeepSeek-R1-UD-IQ1_S/DeepSeek-R1-UD-IQ1_S-00001-of-00003.gguf"
+  LLAMA_LOG="llama_server.log"
+  LLAMA_PORT=10000
+
+  # Kill any existing llama-server process
+  echo "🛑 Stopping any existing Llama.cpp server..."
+  pkill -f "llama-server" || true
+
+  # Start Llama.cpp server
+  echo "🚀 Starting Llama.cpp server..."
+  $LLAMA_SERVER_BIN --model $LLAMA_MODEL --port $LLAMA_PORT --ctx-size 8194 --n-gpu-layers $N_GPU_LAYERS > "$LLAMA_LOG" 2>&1 &
+
+  sleep 2  # Allow some time for the server to start
+
+  # Verify if the server started correctly
+  if ! pgrep -f "llama-server" > /dev/null; then
+    echo "❌ Llama.cpp server failed to start! Check $LLAMA_LOG for errors."
+    exit 1
+  else
+    echo "✅ Llama.cpp server is running on port $LLAMA_PORT"
+  fi
+}
+
+
+# ============================
+# Function: Start Open-WebUI
+# ============================
+start_open_webui() {
+  echo "Starting Open-WebUI..."
+
+  source ~/.bashrc
+  conda activate llama.cpp
+
+  WEBUI_LOG="webui.log"
+
+  # Kill any existing Open-WebUI process
+  pkill -f "open-webui serve" || true
+
+  # Run Open-WebUI in background
+  open-webui serve --port $PORT_JU > "$WEBUI_LOG" 2>&1
+
+  # Verify if Open-WebUI started correctly
+  if ! pgrep -f "open-webui serve" > /dev/null; then
+    echo "❌ Open-WebUI failed to start! Check $WEBUI_LOG for errors."
+    exit 1
+  else
+    echo "✅ Open-WebUI is running on port $PORT_JU"
+  fi
+}
+
+# ============================
+# Start Both Servers
+# ============================
+start_llama_server
+start_open_webui
+
+#echo "🎉 Servers started successfully!"
+#echo "Llama.cpp logs: tail -f llama_server.log"
+#echo "Open-WebUI logs: tail -f webui.log"
+#echo "To access Open-WebUI, run the SSH command saved in 'port_forwarding_command'."
+```
+
+### Submitting the Slurm Script
+- to launch both Ollama and Gradio server
+```
+(deepseek) [glogin01]$ sbatch ollama_gradio_run.sh
+Submitted batch job XXXXXX
+```
+- to check if the servers are up and running
+```
+(deepseek) [glogin01]$ squeue -u $USER
+             JOBID       PARTITION     NAME     USER    STATE       TIME TIME_LIMI  NODES NODELIST(REASON)
+            XXXXXX    amd_a100nv_8  ollama_g    $USER  RUNNING       0:02   2-00:00:00      1 gpu##
+```
+- to check the SSH tunneling information generated by the ollama_gradio_run.sh script 
+```
+(deepseek) [glogin01]$ cat port_forwarding_command
+ssh -L localhost:7860:gpu32:7860 $USER@neuron.ksc.re.kr
+```
+
+### Connecting to the Open WebUI
+- Once the job starts, open a a new SSH client (e.g., Putty, MobaXterm, PowerShell, Command Prompt, etc) on your local machine and run the port forwarding command displayed in port_forwarding_command:
+
+<img width="787" alt="Image" src="https://github.com/user-attachments/assets/25b218f2-c188-43a0-8081-2814ba9044b4" />
+
+
+- Then, open http://localhost:7860 in your browser to access the Gradio UI and pull a DeepSeek-R1 model (for example, 'deepseek-r1:14b') to the ollama server models directory (e.g., OLLAMA_MODELS="/scratch/$USER/ollama/models" in the slurm script) from the [Ollama models site](https://ollama.com/search) 
+
+<img width="1231" alt="gradio_ui" src="https://github.com/user-attachments/assets/006ea85b-3535-4f2b-9f39-144ef26446bf" />
+
+
+#### Once the deepseek-r1 model is successfully downloaded, it will be listed in the 'Select Model' dropdown menu on the top right of the Gradio UI. You can start chatting with the deepseek-r1:14b model. You could also pull and chat with other models (e.g., llama3, mistral, etc) by pulling them from the Ollama models list site. 
+
+<img width="1178" alt="gradio_ui2" src="https://github.com/user-attachments/assets/291e20f0-a901-48f8-bb46-a0f667dc79f6" />
+
+
+
 
