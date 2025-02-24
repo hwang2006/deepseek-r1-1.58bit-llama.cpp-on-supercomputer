@@ -2,7 +2,7 @@
 
 DeepSeek-R1, the recently released AI reasoning model from the Chinese AI startup DeepSeek, has gained significant attention for its performance, comparable to leading models like OpenAI's o1 reasoning model. It is open-source and free to use, allowing users to download, modify, and run it for their own purposes.
 
-This repository demonstrates how to run and test DeepSeek-R1 in its dynamic 1.58-bit quantized form using Llama.cpp on a SLURM-managed supercomputer. Thanks to advanced quantization techniques, the full 671B parameter model is compressed to just 131GB, making it significantly more accessible. You can now run it efficiently on a supercomputer with 1 or 2 A100 or H200 GPUs allocated through your account, **with a two H200 GPUs setup mostly recommended for optimal performance**. This removes the need for extremely large GPU configurations.
+This repository demonstrates how to run and test DeepSeek-R1 in its dynamic 1.58-bit quantized form using Llama.cpp on a SLURM-managed supercomputer. Thanks to advanced quantization techniques, the full 671B parameter model is compressed to just 131GB, making it significantly more accessible. You can now run it efficiently on a supercomputer with 1~2 A100 or H200 GPUs allocated through your account, **with a two H200 GPUs setup mostly recommended for optimal performance**. This removes the need for extremely large GPU configurations.
 
 Llama.cpp provides an efficient framework for running large-scale AI models on CPUs and GPUs with optimized inference. This guide walks you through the steps needed to set up, deploy, and interact with DeepSeek-R1 in its quantized form on a high-performance computing (HPC) environment.
 
