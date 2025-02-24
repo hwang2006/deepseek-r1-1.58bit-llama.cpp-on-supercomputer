@@ -503,12 +503,11 @@ ssh -L localhost:8080:gpu50:8080 $USER@neuron.ksc.re.kr
 
 - Then, open http://localhost:8080 in your browser to access the Open WebUI and create an admin account to connect the llama.cpp server running on the compute node.
 
-<img width="1231" alt="gradio_ui" src="https://github.com/user-attachments/assets/006ea85b-3535-4f2b-9f39-144ef26446bf" />
-
+<img width="1198" alt="Image" src="https://github.com/user-attachments/assets/d5f835bf-c344-4c9a-9526-d693e8d7ff9a" />
 
 #### Once the deepseek-r1 model is successfully downloaded, it will be listed in the 'Select Model' dropdown menu on the top right of the Gradio UI. You can start chatting with the deepseek-r1:14b model. You could also pull and chat with other models (e.g., llama3, mistral, etc) by pulling them from the Ollama models list site. 
 
-<img width="1178" alt="gradio_ui2" src="https://github.com/user-attachments/assets/291e20f0-a901-48f8-bb46-a0f667dc79f6" />
+
 
 
 
