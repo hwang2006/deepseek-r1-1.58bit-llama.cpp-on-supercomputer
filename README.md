@@ -337,7 +337,7 @@ DeepSeek-R1-GGUF/
 ```
 
 ## Running Open WebUI
-This section describes how to run the Open WebUI along with launching the llama.cpp server and Open WebUI server on a compute node. The following Slurm script will start both servers and output a port forwarding command, which you can use to connect remotely.
+This section describes **how to run the Open WebUI along with launching the llama.cpp server and Open WebUI server on a compute node.** The following Slurm script will start both servers and output a port forwarding command, which you can use to connect remotely.
 
 ### Slurm Script (llama_openwebui_run.sh)
 ```bash
