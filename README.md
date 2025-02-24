@@ -513,7 +513,7 @@ ssh -L localhost:8080:gpu50:8080 $USER@neuron.ksc.re.kr
 <img width="1198" alt="Image" src="https://github.com/user-attachments/assets/d5f835bf-c344-4c9a-9526-d693e8d7ff9a" />
 
 - Connect to the `llama.cpp` server as follows:
-  - Go to **Settings** and **Admin Settings** by clicking the orange admin account at the bottom left in Open WebUI.
+  - Go to **Settings** and then **Admin Settings** by clicking the orange admin account at the bottom left in Open WebUI.
   - Navigate to **Connections > OpenAI Connections**.
   - Add the following details for the new connection:
     - **URL:** `http://127.0.0.1:10000/v1`
