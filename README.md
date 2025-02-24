@@ -516,7 +516,7 @@ ssh -L localhost:8080:gpu50:8080 $USER@neuron.ksc.re.kr
 
 - Once the connection is saved, you can start to use Open WebUI’s chat interface to interact with the DeepSeek-R1 Dynamic 1.58-bit model.
 
-
+![Image](https://github.com/user-attachments/assets/e2083708-d78e-4258-ad44-ed0faf01df21)
 
 
 
