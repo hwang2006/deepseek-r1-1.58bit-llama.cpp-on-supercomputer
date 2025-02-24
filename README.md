@@ -11,7 +11,7 @@ Llama.cpp provides an efficient framework for running large-scale AI models on C
 *   **Dynamic 1.58-bit quantization**: Reduces memory usage while maintaining model performance.
 *   **Supercomputer compatibility**: Run DeepSeek-R1 efficiently on SLURM-managed HPC clusters.
 *   **llama.cpp integration**: Utilize the optimized inference engine for fast execution.
-*   **Supports 1-2 GPUs**: Can be run on a supercomputer with 1 or 2 A100 or H200 GPUs using individual user accounts.
+*   **Supports 1-2 GPUs**: Can be run on a supercomputer with 1~2 A100 or H200 GPUs using individual user accounts.
 
 **Contents**
 * [KISTI Neuron GPU Cluster](#kisti-neuron-gpu-cluster)
