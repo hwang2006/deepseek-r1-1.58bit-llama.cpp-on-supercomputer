@@ -505,8 +505,16 @@ ssh -L localhost:8080:gpu50:8080 $USER@neuron.ksc.re.kr
 
 <img width="1198" alt="Image" src="https://github.com/user-attachments/assets/d5f835bf-c344-4c9a-9526-d693e8d7ff9a" />
 
-#### Once the deepseek-r1 model is successfully downloaded, it will be listed in the 'Select Model' dropdown menu on the top right of the Gradio UI. You can start chatting with the deepseek-r1:14b model. You could also pull and chat with other models (e.g., llama3, mistral, etc) by pulling them from the Ollama models list site. 
+- Then, connect to the `llama.cpp` server as follows:
+  - Go to **Admin Settings** in Open WebUI.
+  - Navigate to **Connections > OpenAI Connections**.
+  - Add the following details for the new connection:
+    - **URL:** `http://127.0.0.1:10000/v1`
+    - **API Key:** `none`
 
+<img width="1135" alt="Image" src="https://github.com/user-attachments/assets/d5f18dff-8280-4c72-ad0e-bf06a820fcfa" />
+
+- Once the connection is saved, you can start to use Open WebUI’s chat interface to interact with the DeepSeek-R1 Dynamic 1.58-bit model.
 
 
 
